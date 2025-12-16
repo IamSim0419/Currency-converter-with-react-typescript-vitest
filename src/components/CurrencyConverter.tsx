@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FiCopy } from "react-icons/fi";
+import CopyToolkit from "./ToasterCopyKit";
 
 type RatesResponse = {
   rates: Record<string, number>;
@@ -15,6 +16,7 @@ export default function CurrencyConverter() {
   const [round, setRound] = useState(2);
   const [history, setHistory] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [copy, setCopy] = useState(false);
 
   // Fetch rates when base changes
   useEffect(() => {
@@ -45,6 +47,8 @@ export default function CurrencyConverter() {
 
   function copyResult() {
     navigator.clipboard.writeText(result.toString());
+    setCopy(true);
+    setTimeout(() => setCopy(false), 1000);
   }
 
   function saveToHistory() {
@@ -99,7 +103,7 @@ export default function CurrencyConverter() {
         <option value={4}>4 decimals</option>
       </select>
 
-      <div className="flex justify-between items-center p-4 border rounded bg-gray-50">
+      <div className="relative flex justify-between items-center p-4 border rounded bg-gray-50">
         <span className="text-xl font-bold">
           {result} {target}
         </span>
@@ -110,6 +114,7 @@ export default function CurrencyConverter() {
         >
           <FiCopy /> Copy
         </button>
+        <CopyToolkit copy={copy} />
       </div>
 
       <button
