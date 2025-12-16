@@ -25,6 +25,7 @@ export default function CurrencyConverter() {
       try {
         const res = await fetch(`https://open.er-api.com/v6/latest/${base}`);
         const data: RatesResponse = await res.json();
+        // console.log(data);
 
         if (data.result !== "success") {
           throw new Error("API error");
@@ -42,7 +43,7 @@ export default function CurrencyConverter() {
   }, [base]);
 
   // Derived value (NO useEffect, NO setState)
-  const rate = rates[target] ?? 0;
+  const rate = rates[target] ?? 0; // rates[target] results is example 58.96 for PHP if base is USD
   const result = rate === 0 ? 0 : Number((amount * rate).toFixed(round));
 
   function copyResult() {
@@ -53,22 +54,19 @@ export default function CurrencyConverter() {
 
   function saveToHistory() {
     const entry = `${amount} ${base} → ${result} ${target}`;
-    setHistory((prev) => [entry, ...prev].slice(0, 10));
+    setHistory((prev) => [entry, ...prev]);
   }
 
   return (
     <div className="p-6 max-w-xl mx-auto my-10 space-y-6 bg-white rounded shadow">
       <h1 className="text-3xl font-bold text-center">💱 Currency Converter</h1>
-
       {loading && <p className="text-center text-sm">Loading…</p>}
-
       <input
         type="number"
         className="w-full border p-2 rounded"
         value={amount}
         onChange={(e) => setAmount(Number(e.target.value))}
       />
-
       <select
         className="w-full border p-2 rounded"
         value={base}
@@ -80,7 +78,6 @@ export default function CurrencyConverter() {
           </option>
         ))}
       </select>
-
       <select
         className="w-full border p-2 rounded"
         value={target}
@@ -92,7 +89,6 @@ export default function CurrencyConverter() {
           </option>
         ))}
       </select>
-
       <select
         className="w-full border p-2 rounded"
         value={round}
@@ -103,7 +99,8 @@ export default function CurrencyConverter() {
         <option value={4}>4 decimals</option>
       </select>
 
-      <div className="relative flex justify-between items-center p-4 border rounded bg-gray-50">
+      {/* Result and Copy Button */}
+      <div className="relative flex justify-between items-center p-4 border rounded bg-gray-100">
         <span className="text-xl font-bold">
           {result} {target}
         </span>
@@ -117,13 +114,13 @@ export default function CurrencyConverter() {
         <CopyToolkit copy={copy} />
       </div>
 
+      {/* Save to History Button */}
       <button
         onClick={saveToHistory}
         className="w-full py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 active:bg-green-700"
       >
         Save to History
       </button>
-
       <ul className="space-y-2 text-sm">
         {history.map((h, i) => (
           <li key={i} className="p-2 border rounded bg-gray-100">
