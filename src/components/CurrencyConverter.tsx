@@ -58,9 +58,17 @@ export default function CurrencyConverter() {
   }
 
   return (
-    <div className="p-6 max-w-xl mx-auto my-10 space-y-6 bg-white rounded shadow">
-      <h1 className="text-3xl font-bold text-center">💱 Currency Converter</h1>
+    <div className="px-6 pt-10 pb-8 max-w-md mx-auto my-10 space-y-6 bg-white rounded-2xl shadow-2xl">
+      <div>
+        <h1 className="text-3xl font-bold">Currency Converter</h1>
+        <p className="text-neutral-600 font-medium mt-2">
+          Enter amount and select currencies
+        </p>
+      </div>
+
       {loading && <p className="text-center text-sm">Loading…</p>}
+
+      {/* Input Fields */}
       <input
         type="number"
         className="w-full border p-2 rounded"
